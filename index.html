@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<!-- Veronica Estudillo Velasco, Mateja Sela -->
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+  </head>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script>
+    // store the d3 version 3 for the scrolling
+    const d3v5 = d3;
+    window.d3 = null;
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.js"></script>
+  <script src="https://datamaps.github.io/scripts/0.5.0/datamaps.all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="graph-scroll.js"></script>
+  <script src="linear_plot.js" ></script>
+  <style>
+
+  body{
+      max-width: 900px;
+      margin: 0px auto;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  .grid{
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "header header"
+      "intr-section intro-section"
+      "first-section first-map"
+      "second-section second-map"
+      "third-section third-map"
+      "footer footer";
+    grid-column-gap: 100px;
+    grid-row-gap: 200px;
+  }
+
+.intro-section{
+transform: translate(0px, 50px);
+}
+
+.header {
+  grid-area: header;
+  transform: translate(0px, -20px);
+
+}
+.first-section{
+  grid-area: first-section;
+}
+
+.second-section{
+  grid-area: second-section;
+}
+
+.third-section{
+  grid-area: third-section;
+}
+
+.explain{
+  position: absolute;
+  top: 2640px;
+}
+
+.first-map{
+  grid-area: first-map;
+}
+
+.second-map{
+  grid-area: second-map;
+}
+
+.third-map{
+  grid-area: third-map;
+}
+
+.hoverinfo1{
+  position : relative;
+  top : 650px;
+  left: 80%;
+  color = "white";
+  background: none no-repeat scroll 0 0 #fff;
+  border-radius: 25px;
+  border: 1px solid black;
+}
+
+.hoverinfo2{
+  position : relative;
+  top : 1150px;
+  left: 80%;
+  background-color = "white";
+  background: none no-repeat scroll 0 0 #fff;
+  border-radius: 25px;
+  border: 1px solid black;
+}
+
+.hoverinfo3{
+  position : relative;
+  top : 1850px;
+  left: 80%;
+  background-color = "white";
+  background: none no-repeat scroll 0 0 #fff;
+  border-radius: 25px;
+  border: 1px solid black;
+}
+
+.hoverinfo4{
+  position : relative;
+  top : 2600px;
+  background-color = "white";
+  background: none no-repeat scroll 0 0 #fff;
+  border-radius: 25px;
+  border: 1px solid black;
+}
+
+</style>
+
+<body>
+  <h1 class = "header"> West and The Rest - How Life Differs Across the World </h1>
+
+  <section class = intro-section>
+    <h3>Explaining the human-development index through a world map</h3>
+      Since I come from Serbia, a third world country, I've always
+      wondered why my country is different than others. Since I left home at 18 to study abroad, I asked myself: <br><br>
+      "Why can't I travel without a visa?" <br> "Why are some countries so extremely poor" <br>
+      "Why is my salary lower, only because I have a different passport with the exact same qualifications".<br><br>
+
+      In this visualization
+      I wanted to try and explain some of the concepts of inequality, and how they influence
+      everyday citizens. I want to present a map of the world to compare and contrast GDP over time,
+      from 1961 to 2018, and show that the world hasn't changed much in terms on inequality in the past 50+ years.
+   </section>
+
+  <div id="container">
+  <div class="grid">
+
+    <section class = first-section>
+      <h3>Money Makes the World Go Round</h3>
+      The map to the right presents the average gdp per capita for most countries from 1961-2018. The red countries present areas with lower gdp
+      while green ones are what we consider "wealthy nations". We can see that there is a big gap between the countries, even neigboring ones,
+      such as the US and Mexico. Let's see how this progresses over time!
+     </section>
+
+     <div class = "first-map" id="first-map-container" style="width: 600px; height: 300px;"></div>
+
+
+    <section class = second-section>
+      <h3>The Good Old Times?</h3>
+        One might think that the world was much different in 1961, but this map shows that the colors haven't changed much from the previous graph.
+        Looks can be deceiving though. If you hover over a country, you can see that the values are pretty low compared to the previous map.
+        This is comapred to today's dollars, which means it was adjusted for inflation. The world was much poorer back in the day,
+        so it makes sense that less money was circulating, but it could also mean that most of the world relied on agriculture to
+        survive in 1960's. Note that the maximum and the minimum values for colors were readjusted for this map.
+
+     </section>
+     <div class = "second-map" id="second-map-container" style="width: 600px; height: 300px;"></div>
+
+    <section class = third-section>
+      <h3>It gets (somewhat) better?</h3>
+      We can see that the colors on the previous map were not as distinct as they are here. This could be because a few smaller countries like
+      Switzerland and Norway were the richest at the time, but today we see that the wealth seems to have stayed in "first world" for the past 50 years,
+      and that the rest of the world is still in the red. It's important to not that this map takes the poorest and the richest country in 2017,
+      and that the coloring presented does not account for the whole story. Some countries went from a very low gdp to a very high one,
+      like the US, which rose almost 20 times in 50 years, while some countries grew much slower like Chad, with the GDP rising only 6 times.
+      This means that proportionally the wealth gap between nations is present for 50 years.
+     </section>
+
+     <p class ="explain">
+     Here you can see how the average values for different metrics change over time.<br>
+     Please note that the maps above also change, so you can compare the values between 1961 and 2017
+     for different metrics. Note that the map is clickable.</p>
+     <div class = "third-map" id="third-map-container" style="width: 600px; height: 300px;"></div>
+
+   </div>
+
+<form>
+  <b>Change the Map</b> <br></br>
+  <div style="display:inline"> <input type="radio" name="map_type" value="gdp" checked="checked"> Average GDP per capita </div>
+  <div style="display:inline"> <input type="radio" name="map_type" value="life"> Average Life Expectancy </div>
+  <div style="display:inline"><input type="radio" name="map_type" value="school" style="display:inline"> Average Primary School Enrollment  </div>
+</form>
+
+<div class = "grid2">
+  <div class = "maps" id="map-container" style="width: 1000px; height: 600px;"></div>
+
+<div/>
+  <div id="footer"></div>
+<script class="strict-bottom">
+
+// set up the data for each map
+
+let years_array = []
+for(let i = 1961; i<2018; i++){
+  years_array.push(i);
+}
+
+const FIRST_YEAR = 1961; // the first year you want for the mapping
+const LAST_YEAR = 2016; //the last year for the data
+var average_dataset = {}; //store all average_data
+var first_year_dataset = {} // dataset for the first year on the map
+var last_year_dataset = {}
+var dataset_color = {}; // store all the colors for the average
+var dataset_firstyear_color = {} // color for the first year map
+var dataset_lastyear_color = {} // color for the last year map
+var raw_dataset = {}; //will store raw data
+var linear_chart_data = []; //store all the data that's presented in the linear chart
+
+//min max for normalization, over all countries
+let max_ever = -1;
+let min_ever = 1000000;
+//min max for average
+let min_val = 1000000;
+let max_val = -1;
+//min max for the first year
+let min_first_year = 1000000;
+let max_first_year = -1;
+//min max for the last year
+let min_last_year = 1000000;
+let max_last_year = -1;
+let neutral_color = "#f0f1f1"
+// min max for linear charts
+let line_min = 1000000;
+let line_max = -1;
+
+//objects for the linear graph
+let line_dataset = {}
+
+// set the color scale
+var color_scale = d3.scale.linear()
+  .range(["#B72B1D","#41e499"]);
+
+/*
+
+  This part of the code generates three maps, based on the data passed to them
+
+*/
+
+// we have to use version 5 of d3, but DataMaps works in v4,
+// so we need to say d3v5 every time we use d3
+
+var gdp_map_first = new Datamap({
+    element: document.getElementById('first-map-container'),
+    scope: 'world',
+    geographyConfig: {
+      highlightOnHover: false,
+      highlightBorderColor: '#B7B7B7',
+      popupOnHover: true,
+      popupTemplate: function(geo, data) {
+            if(average_dataset[geo.id] != "" && average_dataset[geo.id] != undefined){
+              return ['<div style = "position : relative" class="hoverinfo1"><strong>',
+                      "Average value in " + geo.properties.name + " is ",
+                       Math.round(average_dataset[geo.id] * 100) / 100,
+                      '</strong></div>'].join('');
+            }
+            else{
+              return ['<div class="hoverinfo1"><strong>',
+                      "No data for " + geo.properties.name,
+                      '</strong></div>'].join('');
+            }
+      }
+    },
+    fills: {
+        defaultFill: "#F4F4F4"
+    },
+  });
+
+
+  var gdp_map_second = new Datamap({
+      element: document.getElementById('second-map-container'),
+      scope: 'world',
+      geographyConfig: {
+        highlightOnHover: false,
+        highlightBorderColor: '#B7B7B7',
+        popupOnHover: true,
+        popupTemplate: function(geo, data) {
+              if(first_year_dataset[geo.id] != "" && geo.id != -99 && geo.id != "ESH"
+                  && geo.id != "TWN" && first_year_dataset[geo.id] != undefined){
+                return ['<div class="hoverinfo2"><strong>',
+                        "1961 value in " + geo.properties.name + " is ",
+                         Math.round(first_year_dataset[geo.id] * 100) / 100,
+                        '</strong></div>'].join('');
+              }
+              else{
+                return ['<div class="hoverinfo2"><strong>',
+                        "No data for " + geo.properties.name,
+                        '</strong></div>'].join('');
+              }
+        }
+      },
+      fills: {
+          defaultFill: "#F4F4F4"
+      },
+    });
+
+    var gdp_map_third = new Datamap({
+        element: document.getElementById('third-map-container'),
+        scope: 'world',
+        geographyConfig: {
+          highlightOnHover: false,
+          highlightBorderColor: '#B7B7B7',
+          popupOnHover: true,
+          popupTemplate: function(geo, data) {
+                if(last_year_dataset[geo.id] != "" && geo.id != -99 && geo.id != "ESH"
+                    && geo.id != "TWN" && last_year_dataset[geo.id] != undefined){
+                  return ['<div class="hoverinfo3"><strong>',
+                          "2016 value in " + geo.properties.name + " is ",
+                          Math.round(last_year_dataset[geo.id] * 100) / 100,
+                          '</strong></div>'].join('');
+                }
+                else{
+                  return ['<div class="hoverinfo3"><strong>',
+                          "No data for " + geo.properties.name,
+                          '</strong></div>'].join('');
+                }
+          }
+        },
+        fills: {
+            defaultFill: "#F4F4F4"
+        },
+      });
+
+
+    var map = new Datamap({
+        element: document.getElementById('map-container'),
+        scope: 'world',
+        geographyConfig: {
+          highlightOnHover: false,
+          highlightBorderColor: '#B7B7B7',
+          popupOnHover: true,
+          popupTemplate: function(geo, data) {
+                if(average_dataset[geo.id] != "" && geo.id != -99 && geo.id != "ESH"
+                    && geo.id != "TWN"){
+                  return ['<div class="hoverinfo4"><strong>',
+                          "Average value in " + geo.properties.name + " is ",
+                           average_dataset[geo.id],
+                          '</strong></div>'].join('');
+                }
+                else{
+                  return ['<div class="hoverinfo4"><strong>',
+                          "No data for " + geo.properties.name,
+                          '</strong></div>'].join('');
+                }
+          }
+        },
+        fills: {
+            defaultFill: "#F4F4F4"
+        },
+        done: function(datamap) {
+            datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+              for(i in linear_chart_data){
+                if(linear_chart_data[i][geography.id]){
+                  linear_chart_data.splice(i, 1);
+                  //switch the color back to the average
+                  dataset_color[geography.id] = color_scale(average_dataset[geography.id])
+                  datamap.updateChoropleth(dataset_color);
+                  return;
+                }
+              }
+              // if there are more than 5 countries
+              // show an alert message and return
+              if(linear_chart_data.length > 4){
+                alert("please remove a country to add more");
+                return;
+              }
+              let country_raw_data = {};
+              country_raw_data[geography["id"]] = line_dataset[geography.id];
+              // don't allow coloring if there is no data
+              if(dataset_color[geography.id] != neutral_color){
+                linear_chart_data.push(country_raw_data);
+                dataset_color[geography.id] = "blue";
+                datamap.updateChoropleth(dataset_color);
+              }
+              // add linear stuff here
+              // use a for loop to plot all the lines again
+              for (i in linear_chart_data){
+
+                let selected_country = Object.keys(linear_chart_data[i]);
+                // one country data to be passed as y values
+                let data_one_country = linear_chart_data[i][selected_country];
+                years_array
+                var data = data_one_country.map(function(d, i) {
+                  return {
+                    date: years_array[i],
+                    value: d
+                  };
+                });
+                console.log(data);
+                update(data_one_country, data);
+                console.log(linear_chart_data[i][selected_country]);
+              }
+              })
+            }
+          });
+
+    let base_url = 'http://www.cs.middlebury.edu/~msela/cs465_final/'
+    let url = 'http://www.cs.middlebury.edu/~msela/cs465_final/gdp.json'
+    fetch_url(url);
+    function fetch_url(url){
+      fetch(url)
+        .then(
+          function(response) {
+            if (!response.ok) {
+              console.log('Request problem occured. Status Code: ' + response.status);
+              throw Error(response.status);
+            }
+            // Examine the text in the response
+            return response.json();
+          }
+        ).then(data => {
+          let countries_list = Datamap.prototype.worldTopo.objects.world.geometries.map(a => a["id"]);
+          raw_dataset = data; // set the raw dataset to data
+
+          Object.keys(data).forEach(function(key){
+            var country = key, value = average_dataset[key];
+
+            if ($.inArray(country, countries_list) > -1){
+              let one_country_dict = {}; // the country that's on the list, and to be added
+              one_country_dict[country] = data[country];
+              average_dataset[country] = data[country]; //our dataset will now contain all data
+
+              //find the minimum and maximum values for the averages of colors
+              let counter = 0;
+              let sum_country = 0;
+              line_dataset[country] = []
+              for(i in Object.keys(data[country])){
+                let one_year = Object.keys(data[country])[i]
+
+                line_dataset[country].push(data[country][one_year]);
+
+
+                // get the data for the 1961 map
+                if(one_year == FIRST_YEAR){
+                  if(data[country][one_year] && !isNaN(data[country][one_year])){
+                    let data_first_year = data[country][one_year];
+                    first_year_dataset[country] = data_first_year;
+                    if(data_first_year < min_first_year){
+                      min_first_year = data_first_year;
+                    }
+                    if(data_first_year > max_first_year){
+                      max_first_year = data_first_year;
+                    }
+                  }
+                  else{
+                    dataset_firstyear_color[country] = neutral_color;
+                  }
+                }
+                if(one_year == LAST_YEAR){
+                  if(data[country][one_year] && !isNaN(data[country][one_year])){
+
+                    let data_last_year = data[country][one_year];
+                    last_year_dataset[country] = data_last_year;
+                    if(data_last_year < min_last_year){
+                      min_last_year = data_last_year;
+                    }
+                    if(data_last_year > max_last_year){
+                      max_last_year = data_last_year;
+                    }
+                  }
+                  else{
+                    dataset_lastyear_color[country] = neutral_color;
+                  }
+                }
+                // get the data for the 2016 map
+                let one_year_data = data[country][one_year]
+                if(!isNaN(one_year_data) && one_year_data){
+                  sum_country += one_year_data;
+                  counter +=1;
+                  has_data = true;
+                }
+              }
+              // average value over the years for one country
+                let average = sum_country/counter;
+
+                if(+average < +min_val && average != ""){
+                  min_val = average;
+                }
+                if(+average > +max_val && average != ""){
+                  max_val = average;
+                }
+
+                if(average != "" && !isNaN(average)){
+                  //console.log(average);
+                  // set the data_set of the country to the average of all year
+                  average_dataset[country] = average;
+                }
+              }
+              // the country has no data, so no color
+          });
+
+          // now loop through the data for the first year and set all the colors
+          color_scale.domain([min_first_year, max_first_year]);
+          Object.keys(first_year_dataset).forEach(function(key){
+            var country = key, value = first_year_dataset[key];
+
+            let data_for_year = first_year_dataset[country];
+            if(data_for_year){
+              dataset_firstyear_color[country] = color_scale(data_for_year)
+            }
+          });
+
+          color_scale.domain([min_last_year, max_last_year]);
+          Object.keys(last_year_dataset).forEach(function(key){
+            var country = key, value = last_year_dataset[key];
+
+            let data_for_year = last_year_dataset[country];
+            if(data_for_year){
+              dataset_lastyear_color[country] = color_scale(data_for_year)
+            }
+
+          color_scale.domain([min_val, max_val]);
+          // run through cleaned dataset and set the color of the map accordingly
+          Object.keys(average_dataset).forEach(function(key){
+            var country = key, value = average_dataset[key];
+            // set the colors to the average of each sum_country
+            let average = average_dataset[country]; //average value of the country to be transformed into a color
+            if(isNaN(average) || !average_dataset[country]){
+              dataset_color[country] = neutral_color
+              average_dataset[country] = "";
+            }
+            else{
+              dataset_color[country] = color_scale(average);
+            }
+          });
+        });
+
+          //color the map
+          map.updateChoropleth(dataset_color);
+          gdp_map_first.updateChoropleth(dataset_color);
+          gdp_map_second.updateChoropleth(dataset_firstyear_color);
+          gdp_map_third.updateChoropleth(dataset_lastyear_color);
+        })
+        .catch(function(err) {
+          console.log('Fetch Error :-S', err);
+        });
+    }
+
+    // on a radio-button click the map color will change to display all countries
+    d3.selectAll('input[name="map_type"]').on("change", function(){
+      if(linear_chart_data.length > 0){
+        alert("please remove all countries to change the map");
+        return;
+      }
+
+      //reset min and max
+      min_val = 1000000;
+      max_val = -1;
+      min_first_year = 1000000;
+      max_first_year = -1;
+      min_last_year = 1000000;
+      max_last_year = -1;
+
+      // reset all data, before it is entered again into the maps
+      average_dataset = {};
+      first_year_dataset = {};
+      last_year_dataset = {};
+      dataset_color = {};
+      dataset_firstyear_color = {};
+      dataset_lastyear_color = {};
+      raw_dataset = {};
+
+      map_to_display = d3.select('input[name="map_type"]:checked').node().value;
+      if(map_to_display == "school"){
+        url = base_url.concat("school.json");
+        fetch_url(url);
+      }
+      if(map_to_display == "life"){
+        url = base_url.concat("life.json");
+        fetch_url(url);
+      }
+      if(map_to_display == "gdp"){
+        url = base_url.concat("gdp.json");
+        fetch_url(url);
+      }
+    });
+
+    </script>
+  </div>
+
+</body>
+</html>
